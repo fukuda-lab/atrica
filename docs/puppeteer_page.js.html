@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: puppeteer/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                     
+                        <h1 class="navbar-item">Atrica Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="BrowserEvents.html">BrowserEvents</a></li><li><a href="Cache.html">Cache</a></li><li><a href="Crawler.html">Crawler</a></li><li><a href="Frame.html">Frame</a></li><li><a href="ImageCollection.html">ImageCollection</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Page.html">Page</a></li><li><a href="Pipe.html">Pipe</a></li><li><a href="Profile.html">Profile</a></li><li><a href="Progressbar.html">Progressbar</a></li><li><a href="global.html#Puppeteer">Puppeteer</a></li><li><a href="global.html#Request">Request</a></li><li><a href="global.html#Response">Response</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="TaskDispatcher.html">TaskDispatcher</a></li></ul><h3>Global</h3><ul><li><a href="global.html#crawler">crawler</a></li><li><a href="global.html#createOrUpdate">createOrUpdate</a></li><li><a href="global.html#enrichBrowserAPI">enrichBrowserAPI</a></li><li><a href="global.html#getModels">getModels</a></li><li><a href="global.html#launch">launch</a></li><li><a href="global.html#launchWithChromiumPuppeteer">launchWithChromiumPuppeteer</a></li><li><a href="global.html#launchWithFirefoxPuppeteer">launchWithFirefoxPuppeteer</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#requestHandler">requestHandler</a></li><li><a href="global.html#setupAtrica">setupAtrica</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>puppeteer/page.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const ImageCollection = require("./image-collection");
+const TaskDispatcher = require("./task-dispatcher");
+const $ = require("./instructions");
+const EventEmitter = require("events").EventEmitter;
+const Frame = require("./frame");
+const utils = require("../utils");
+
+/**
+ * Represent a tab in the browser
+ */
+class Page extends EventEmitter {
+	/**
+	 * Construct a Page
+	 * @param {import('./index').TBrowserPuppeteer} puppeteer - the browser puppeteer controlling the browser
+	 * @param {number} tabId - the tabId of the tab in the browser
+	 */
+	constructor(puppeteer, tabId) {
+		super();
+		this.id = tabId;
+		this.open = true;
+		this._main_frame = null;
+		this._url = null;
+		this.dispatcher = new TaskDispatcher(puppeteer.socket, {
+			tabId: tabId
+		});
+
+		puppeteer.on(`page(${this.id}).request`, request => {
+			if (request._type === "main_frame") {
+				this._url = request.url();
+			}
+
+			if (!request._frames[0]) {
+				request._frames[0] = new Frame({
+					id: 0,
+					url: this._url,
+					parentFrameId: -1
+				});
+			}
+			this._main_frame = request._frames[0] || null;
+			this.emit("request", request);
+		});
+
+		puppeteer.on(`page(${this.id}).response`, response =>
+			this.emit("response", response)
+		);
+
+		// Page loading events
+		puppeteer.on(`page(${this.id}).document_start`, () => this.emit("start"));
+		puppeteer.on(`page(${this.id}).document_end`, () =>
+			this.emit("domcontentloaded")
+		);
+		puppeteer.on(`page(${this.id}).document_load`, () => this.emit("load"));
+	}
+
+	/**
+	 * Return the main frame
+	 */
+	mainFrame() {
+		return this._main_frame || null;
+	}
+
+	/**
+	 * The browser will visit the url {url} on tab with the id {tabId}
+	 * If tabId is not defined then the tab used will be the default tab
+	 * (the tab used to etablish the connection with the worker)
+	 * @param {string} url - The url to visit
+	 * @param {string} [event] - When the page load should be considered finished
+	 * 	event == "start" : before any script is loaded
+	 * 	event == "domcontentloaded" : When DOM has finished loading
+	 * 	event == "load" : everything has finished loading (images and scripts too)
+	 * @returns {Promise} - Promise resolved when the page has finished loading
+	 */
+	async goto(url, { waitUntil = "load", timeout = 30000 } = {}) {
+		await this.dispatcher.execute($.page.goto, { url });
+		await this.waitForEvent(waitUntil, timeout);
+	}
+
+	/**
+	 * Take a screenshot of the tab
+	 * @param {object} options
+	 * @param {string} path - where the image will be save (if not null)
+	 * @param {boolean} fullPage - Capture the visible part or the fullpage ?
+	 * @returns {Promise&lt;Buffer>} - Buffer containing the image
+	 */
+	async screenshot({ path = null, fullPage = false }) {
+		let params = { fullpage: fullPage };
+		let dataURIs = await this.dispatcher.execute($.page.screenshot, params);
+		let b64strs = dataURIs.map(data => data.split(",")[1]);
+		let buffers = b64strs.map(data => Buffer.from(data, "base64"));
+		let imageCollection = new ImageCollection(buffers);
+		let mergedImage = await imageCollection.verticalJoin();
+
+		if (path) {
+			await mergedImage.toFile(path);
+		} else {
+			return await mergedImage.toBuffer();
+		}
+	}
+
+	/**
+	 * Execute a function in the page
+	 * @param {string|function} func
+	 * @param {Array&lt;any>} args -
+	 * @returns {Promise} - Result of the script execution
+	 */
+	async evaluate(func, ...args) {
+		let code = func.toString();
+		let res =
+			(await this.dispatcher.execute($.page.evaluate, { code, args })) || [];
+		return res[0];
+	}
+
+	/**
+	 * Close the tab
+	 * @returns {Promise} - No result
+	 */
+	async close() {
+		let open = true;
+		const EXPIRED = Symbol();
+
+		while (open) {
+			let result = await Promise.race([
+				this.dispatcher.execute($.page.close),
+				(async () => {
+					await utils.sleep(1);
+					return EXPIRED;
+				})()
+			]);
+			open = false;
+		}
+		if (this.puppeteer &amp;&amp; this.puppeteer._pages)
+			delete this.puppeteer._pages[this.id];
+	}
+
+	/**
+	 * Return the current url of the page
+	 * @private
+	 */
+	url() {
+		return this._url;
+	}
+
+	/**
+	 * Promised resolved after ${ms} milliseconds
+	 * @returns {Promise}
+	 */
+	async waitFor(ms) {
+		await utils.msleep(ms);
+	}
+
+	async waitForEvent(name, timeout = 0) {
+		let promises = [];
+		let eventPromise = new Promise(res => this.once(name, arg => res(arg)));
+		let timeoutPromise = new Promise((_, rej) =>
+			setTimeout(
+				() =>
+					rej(
+						new Error(`Timeout for event ${name} : ${timeout}ms elapsed`)
+					),
+				timeout
+			)
+		);
+
+		promises.push(eventPromise);
+		if (timeout &amp;&amp; timeout > 0) promises.push(timeoutPromise);
+
+		return await Promise.race(promises);
+	}
+}
+
+module.exports = Page;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 21 2019 20:26:18 GMT+0900 (Japan Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

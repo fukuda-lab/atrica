@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: puppeteer/puppeteer.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                     
+                        <h1 class="navbar-item">Atrica Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="BrowserEvents.html">BrowserEvents</a></li><li><a href="Cache.html">Cache</a></li><li><a href="Crawler.html">Crawler</a></li><li><a href="Frame.html">Frame</a></li><li><a href="ImageCollection.html">ImageCollection</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Page.html">Page</a></li><li><a href="Pipe.html">Pipe</a></li><li><a href="Profile.html">Profile</a></li><li><a href="Progressbar.html">Progressbar</a></li><li><a href="global.html#Puppeteer">Puppeteer</a></li><li><a href="global.html#Request">Request</a></li><li><a href="global.html#Response">Response</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="TaskDispatcher.html">TaskDispatcher</a></li></ul><h3>Global</h3><ul><li><a href="global.html#crawler">crawler</a></li><li><a href="global.html#createOrUpdate">createOrUpdate</a></li><li><a href="global.html#enrichBrowserAPI">enrichBrowserAPI</a></li><li><a href="global.html#getModels">getModels</a></li><li><a href="global.html#launch">launch</a></li><li><a href="global.html#launchWithChromiumPuppeteer">launchWithChromiumPuppeteer</a></li><li><a href="global.html#launchWithFirefoxPuppeteer">launchWithFirefoxPuppeteer</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#requestHandler">requestHandler</a></li><li><a href="global.html#setupAtrica">setupAtrica</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>puppeteer/puppeteer.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const engine = require("engine.io");
+const TaskDispatcher = require("./task-dispatcher");
+const BrowserPage = require("./page");
+const $ = require("./instructions");
+const BrowserEvents = require("./events");
+
+const clearBrowserDataOptions = {
+	//appcache: true,
+	cache: true,
+	cacheStorage: true,
+	cookies: true,
+	//downloads: true,
+	//fileSystems: true,
+	//formData: true,
+	//history: true,
+	indexedDB: true,
+	localStorage: true,
+	pluginData: false,
+	//passwords: true,
+	serviceWorkers: true,
+	webSQL: true
+};
+
+/**
+ * @typedef Instruction - Represent an instruction
+ * @property {number} id - The ID of the instruction
+ * @property {string} type - The type/name of the instruction
+ * @property {object} [params] - The parameters of the instruction
+ */
+
+/**
+ * @typedef InstructionResult - Represent the result of an instruction
+ * @property {number} id - The ID of the instruction
+ * @property {object} [result] - The result of the instruction
+ */
+
+/**
+ * @typedef ClearBrowserOptions
+ * @property {boolean} [appcache]
+ * @property {boolean} [cache]
+ * @property {boolean} [cacheStorage]
+ * @property {boolean} [cookies]
+ * @property {boolean} [downloads]
+ * @property {boolean} [fileSystems]
+ * @property {boolean} [formData]
+ * @property {boolean} [history]
+ * @property {boolean} [indexedDB]
+ * @property {boolean} [localStorage]
+ * @property {boolean} [pluginData]
+ * @property {boolean} [passwords]
+ * @property {boolean} [serviceWorkers]
+ * @property {boolean} [webSQL]
+ */
+
+/**
+ * @typedef Response
+ * @property {object} headers - The headers of the response
+ * @property {number} bodySize - The size of the body
+ * @property {boolean} [base64Encoded] - Is the body encoded as base64 string ?
+ * @property {string} [body] - The content of the request body
+ */
+
+/**
+ * @typedef Request
+ * @property {string} url - the url of the request
+ * @property {string} type - (script|image|...) the type of the request
+ * @property {number} requestId - The unique ID of the request
+ * @property {string} method - (GET|POST|PUT|DELETE|...)
+ * @property {object} body - Body of the request (POST parameters for instance)
+ * @property {object} headers - headers of the request
+ * @property {Response} [response] - the response to the request
+ */
+
+/**
+ * @typedef {Puppeteer} TBrowserPuppeteer
+ */
+
+/**
+ * Class to remotely control a browser
+ */
+class Puppeteer extends BrowserEvents {
+	/**
+	 * Construct a browser puppeteer to control a browser
+	 * @param {engine.Socket} socket - A socket toward the browser to control
+	 */
+	constructor(socket) {
+		super(socket);
+		this.socket = socket;
+		this.dispatcher = new TaskDispatcher(socket);
+		/** @private */
+		this._pages = {};
+
+		socket.addListener("event", ({ type, params }) => {});
+	}
+
+	/**
+	 * Return a list of the pages
+	 * @returns {Promise&lt;Array&lt;BrowserPage>>}
+	 */
+	async pages() {
+		let pagesId = await this.dispatcher.execute($.page.pages);
+		let pages = pagesId.map(pageId => {
+			if (this._pages[pageId]) {
+				return this._pages[pageId];
+			} else {
+				let page = new BrowserPage(this, pageId);
+				this._pages[pageId] = page;
+				return page;
+			}
+		});
+		return pages;
+	}
+
+	/**
+	 * Opens a new page
+	 * @returns {Promise&lt;BrowserPage>} - The default tab
+	 */
+	async newPage() {
+		let pageId = await this.dispatcher.execute($.page.newPage);
+		let page = new BrowserPage(this, pageId);
+		return page;
+	}
+
+	/**
+	 * If cookies is null, returns all the cookies from the browser
+	 * Else, if cookies is not null, is set the cookies
+	 * @param {Array&lt;object>} cookies
+	 * @param {string} firstPartyDomain - necessary for Tor
+	 * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies#First-party_isolation
+	 * @returns {Promise}
+	 */
+	async cookies(cookies, firstPartyDomain) {
+		if (cookies) {
+			return await this.dispatcher.execute($.setCookies, { cookies });
+		} else {
+			return await this.dispatcher.execute($.getCookies, {
+				firstPartyDomain
+			});
+		}
+	}
+
+	/**
+	 * Allow to clear various browsing data.
+	 * Check the link for more information about the params:
+	 * https://developer.chrome.com/extensions/browsingData
+	 * @param {ClearBrowserOptions} dataTypes - describe the types of data to clear
+	 * @param {object} options
+	 * @param {number} options.since
+	 * @returns {Promise}
+	 */
+	async clearBrowsingData(dataTypes, options = { since: 0 }) {
+		return await this.dispatcher.execute($.clearBrowsingData, {
+			options,
+			dataTypes
+		});
+	}
+
+	/**
+	 * Clear ALL browsing data
+	 * @returns {Promise} - No result
+	 */
+	async clearAllBrowsingData() {
+		const options = { since: 0 };
+		return await this.clearBrowsingData(clearBrowserDataOptions, options);
+	}
+
+	/**
+	 *	Will evaluate the given function with the given arguments in the browser,
+	 * in the extension with access to the WebExtension API
+	 * @param {string|Function} code
+	 * @param {Array&lt;any>} args
+	 */
+	async evaluate(code, args = []) {
+		return await this.dispatcher.execute($.evaluate, {
+			code: code.toString(),
+			args
+		});
+	}
+}
+
+module.exports = Puppeteer;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 21 2019 20:26:18 GMT+0900 (Japan Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+	"typescript": {
+		"moduleRoot": "src"
+	},
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc"]
+	},
+	"source": {
+		"include": ["src", "README.md"],
+		"includePattern": ".js$",
+		"excludePattern": "(extension)"
+	},
+	"plugins": [
+		"plugins/markdown",
+		"node_modules/better-docs/category",
+		"jsdoc-plugin-typescript"
+	],
+	"templates": {
+		"disableSort": false,
+		"collapse": true,
+		"better-docs": {
+			"name": "Atrica Documentation"
+		}
+	},
+	"opts": {
+		"destination": "./docs/",
+		"encoding": "utf8",
+		"private": true,
+		"recurse": true,
+		"template": "node_modules/better-docs",
+		"sort": true
+	}
+}

@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: puppeteer/events.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                     
+                        <h1 class="navbar-item">Atrica Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="BrowserEvents.html">BrowserEvents</a></li><li><a href="Cache.html">Cache</a></li><li><a href="Crawler.html">Crawler</a></li><li><a href="Frame.html">Frame</a></li><li><a href="ImageCollection.html">ImageCollection</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Page.html">Page</a></li><li><a href="Pipe.html">Pipe</a></li><li><a href="Profile.html">Profile</a></li><li><a href="Progressbar.html">Progressbar</a></li><li><a href="global.html#Puppeteer">Puppeteer</a></li><li><a href="global.html#Request">Request</a></li><li><a href="global.html#Response">Response</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="TaskDispatcher.html">TaskDispatcher</a></li></ul><h3>Global</h3><ul><li><a href="global.html#crawler">crawler</a></li><li><a href="global.html#createOrUpdate">createOrUpdate</a></li><li><a href="global.html#enrichBrowserAPI">enrichBrowserAPI</a></li><li><a href="global.html#getModels">getModels</a></li><li><a href="global.html#launch">launch</a></li><li><a href="global.html#launchWithChromiumPuppeteer">launchWithChromiumPuppeteer</a></li><li><a href="global.html#launchWithFirefoxPuppeteer">launchWithFirefoxPuppeteer</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#requestHandler">requestHandler</a></li><li><a href="global.html#setupAtrica">setupAtrica</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>puppeteer/events.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { EventEmitter } = require("events");
+const engine = require("engine.io");
+const Request = require("./request");
+const Response = require("./response");
+const Cache = require("./cache");
+const BrowserPage = require("./page");
+
+class BrowserEvents extends EventEmitter {
+	/**
+	 * Construct a BrowserPage
+	 * @param {engine.Socket} socket - the browser puppeteer controlling the browser
+	 */
+	constructor(socket) {
+		super();
+		/** @private */
+		this._requestsCache = new Cache(120000);
+
+		/** @private */
+		this._responseCache = new Cache(120000);
+
+		/** @private */
+		this._$socket = socket;
+
+		socket.on("event", event => {
+			let { type, params } = event;
+			switch (type) {
+				case "targetcreated": {
+					this.emit("targetcreated", {
+						type: () => "page",
+						page: async () => {
+							return (
+								this._pages[params.id] ||
+								new BrowserPage(this, params.id)
+							);
+						}
+					});
+					break;
+				}
+				case "request": {
+					this._handle_request_event(params);
+					break;
+				}
+				case "response": {
+					this._handle_response_event(params);
+					break;
+				}
+				case "document_start": {
+					this.emit(`page(${params.tabId}).document_start`)
+					break;
+				}
+				case "document_end": {
+					this.emit(`page(${params.tabId}).document_end`)
+					break;
+				}
+				case "document_idle": {
+					this.emit(`page(${params.tabId}).document_idle`)
+					break;
+				}
+				case "document_load": {
+					this.emit(`page(${params.tabId}).document_load`)
+					break;
+				}
+				default: {
+					this.emit(type, params);
+					console.error(`Unknown event of type '${type}'`, params);
+				}
+			}
+		});
+	}
+
+	/**
+	 * @private
+	 */
+	_handle_request_event(params) {
+		if (params.tabId &lt; 0) return;
+
+		let request = new Request(params);
+		if(this._requestsCache.has(request.id)) {
+			let previousRequest = this._requestsCache.get(request.id);
+			previousRequest._redirectChain.push(previousRequest);
+			request._redirectChain = previousRequest._redirectChain;
+		}
+		this._requestsCache.set(request.id, request);
+		this.emit(`page(${params.tabId}).request`, request);
+
+		if (this._responseCache.has(request.id)) {
+			this._handle_response_event(this._responseCache.get(request.id));
+			this._responseCache.del(request.id);
+		}
+	}
+
+	/**
+	 * @private
+	 */
+	_handle_response_event(params) {
+		if (params.tabId &lt; 0) return;
+
+		let { requestId, tabId } = params;
+		if (this._requestsCache.has(requestId)) {
+			let request = this._requestsCache.get(requestId);
+			let response = new Response(params, request, this._$socket);
+			request.emit(`response`, response);
+			this.emit(`page(${tabId}).response`, response);
+			this._requestsCache.del(request.id);
+		} else {
+			this._responseCache.set(requestId, params);
+		}
+	}
+}
+
+module.exports = BrowserEvents;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 21 2019 20:26:18 GMT+0900 (Japan Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

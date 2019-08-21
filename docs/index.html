@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                     
+                        <h1 class="navbar-item">Atrica Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="BrowserEvents.html">BrowserEvents</a></li><li><a href="Cache.html">Cache</a></li><li><a href="Crawler.html">Crawler</a></li><li><a href="Frame.html">Frame</a></li><li><a href="ImageCollection.html">ImageCollection</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Page.html">Page</a></li><li><a href="Pipe.html">Pipe</a></li><li><a href="Profile.html">Profile</a></li><li><a href="Progressbar.html">Progressbar</a></li><li><a href="global.html#Puppeteer">Puppeteer</a></li><li><a href="global.html#Request">Request</a></li><li><a href="global.html#Response">Response</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="TaskDispatcher.html">TaskDispatcher</a></li></ul><h3>Global</h3><ul><li><a href="global.html#crawler">crawler</a></li><li><a href="global.html#createOrUpdate">createOrUpdate</a></li><li><a href="global.html#enrichBrowserAPI">enrichBrowserAPI</a></li><li><a href="global.html#getModels">getModels</a></li><li><a href="global.html#launch">launch</a></li><li><a href="global.html#launchWithChromiumPuppeteer">launchWithChromiumPuppeteer</a></li><li><a href="global.html#launchWithFirefoxPuppeteer">launchWithFirefoxPuppeteer</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#requestHandler">requestHandler</a></li><li><a href="global.html#setupAtrica">setupAtrica</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Title</p>
+                        <h1>Home</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Atrica</h1>
+<p>Atrica is a set of tools, built on top of google-chrome pupeteer API, meant to help you write crawlers, especially for web privacy measurement. It lets you start, control, and gather data from many popular browsers (Chrome, Opera, (and other chromium-based browsers such as the next version of Edge), Firefox, TorBrowser, etc...).</p>
+<p>This project features:</p>
+<ul>
+<li><strong>Puppeteer's API</strong> for chrome, and a part of that API for WebExtension-compatible browsers.</li>
+<li>This <strong>API is enriched</strong> with other functionalities such as browser.cookies() that returns a list of all the cookies,
+browser.clearAllBrowsingData() that remove cookies, localstore, cache, etc...
+and browser.evaluate() that lets you execute a function with access to the WebExtension API.</li>
+<li>A simple <strong>profile manager</strong> that lets you start a clean browsing session, install extensions into it,
+save it, clone it, delete it.</li>
+<li>A <strong>flexible logger</strong> that can save requests and response in a sqlite database.
+You can customize the schemas and create your own tables.</li>
+<li>A <strong>crawler builder</strong> that helps you create a reliable crawler that lets you start several browsers concurrently and restart them if they crash or become unresponsive.</li>
+</ul>
+<p><strong>This repository is looking for a maintainer.</strong></p>
+<p>Table of contents</p>
+<ul>
+<li><a href="#atrica">Atrica</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#guide">Guide</a>
+<ul>
+<li><a href="#basic-example">Basic example</a></li>
+<li><a href="#profiles">Profiles</a>
+<ul>
+<li><a href="#browser-binary-path">Browser binary path</a></li>
+<li><a href="#reusing-profiles">Reusing profiles</a></li>
+<li><a href="#extensions">Extensions</a>
+<ul>
+<li><a href="#downloading-extensions">Downloading extensions</a></li>
+<li><a href="#installing-extensions">Installing extensions</a></li>
+<li><a href="#manual-extension-installation-and-configuration">Manual extension installation and configuration</a></li>
+</ul>
+</li>
+<li><a href="#cleaning-a-profile">Cleaning a profile</a></li>
+<li><a href="#headless-mode-and-other-puppeteers-options">Headless mode and other puppeteer's options</a>
+<ul>
+<li><a href="#puppeteers-options">Puppeteer's options</a></li>
+<li><a href="#headless-mode">Headless mode</a></li>
+</ul>
+</li>
+<li><a href="#torbrowser">TorBrowser</a>
+<ul>
+<li><a href="#torbrowser-with-tor-proxy">TorBrowser with Tor Proxy</a></li>
+<li><a href="#torbrowser-without-tor-proxy">TorBrowser without Tor Proxy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#logger">Logger</a>
+<ul>
+<li><a href="#logger-basic-example">Logger Basic example</a></li>
+<li><a href="#database-structure">Database structure</a></li>
+<li><a href="#custom-data-models">Custom data models</a></li>
+</ul>
+</li>
+<li><a href="#crawler">Crawler</a></li>
+<li><a href="#advanced">Advanced</a>
+<ul>
+<li><a href="#executing-scripts">Executing scripts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1>Installation</h1>
+<ol>
+<li>Install the last version of <a href="https://nodejs.org/en/">nodejs</a> (atrica has not been tested with node &lt; 12.x)</li>
+<li>Create a new folder and run<pre class="prettyprint source lang-bash"><code>npm init
+npm install atrica
+</code></pre>
+</li>
+</ol>
+<p><strong>Warning</strong> this project depends on puppeteer which will automatically download chromium-browser.
+It's about 100Mo so it might that a while on slow connections.</p>
+<h1>Documentation</h1>
+<p>The documentation can be found here: <a href="https://fukuda-lab.github.io/atrica/">https://fukuda-lab.github.io/atrica/</a></p>
+<h1>Guide</h1>
+<p>This is a step by step guide with code and explainations.
+The full codes can be found in the <code>examples</code> folder.</p>
+<div class="warning">
+**Warning**: Puppeteer and atrica heavily rely on javascript's await/async feature.  
+You should first learn [how to use it](https://alligator.io/js/async-functions/).
+</div>
+<h2>Basic example</h2>
+<p>In this example we create a very simple crawler, launching chrome and have it visit
+wikipedia and other wikimedia websites.</p>
+<p>Hopefully the following code is self explainaroty, but here are a few remarks:</p>
+<ul>
+<li>In the first line of the main function, we create a new profile. The 'browser' can take two values:
+<ul>
+<li>&quot;chromium&quot; will create a profile for a chromium-based browser (so it will also work with chrome, opera, vivaldi, Edge, etc...)</li>
+<li>&quot;firefox&quot; will create a profile for a Firefox-based browser (will work with TorBrowser, etc...)</li>
+<li>See next subsection for more details on profiles</li>
+</ul>
+</li>
+<li>In puppeteer, a 'page' is actually a browser tab, so browser.newPage create a new tab.</li>
+</ul>
+<pre class="prettyprint source lang-javascript"><code>// examples/basic.js
+const atrica = require(&quot;atrica&quot;);
+
+async function main() {
+	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+	const browser = await atrica.launch(profile);
+	const domains = [&quot;wikipedia.org&quot;, &quot;wiktionary.org&quot;, &quot;wikiquote.org&quot;];
+
+	for(let domain of domains) {
+		const url = `https://${domain}`;
+		const page = await browser.newPage();
+		await page.goto(url);
+		await atrica.utils.sleep(1);
+		await page.close();
+	}
+}
+
+main();
+</code></pre>
+<h2>Profiles</h2>
+<p>All the code in this subsection is an extract from <code>examples/profiles.js</code>.
+You are encouraged to read this file after reading this subsection.</p>
+<h3>Browser binary path</h3>
+<p>If you create a profile with the minimum options like this:</p>
+<pre class="prettyprint source lang-javascript"><code>	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+</code></pre>
+<p>then atrica will use the chromium version downloaded with puppeteer.
+If you want to use firefox, or a different chromium-based browser, you can
+use the <code>binary</code> option, which expect the full path to the browser binary file:</p>
+<pre class="prettyprint source lang-javascript"><code>	const operaProfile = await atrica.profile({
+		browser: &quot;chromium&quot;,
+		binary: &quot;/snap/bin/opera&quot;,
+	});
+</code></pre>
+<h3>Reusing profiles</h3>
+<p>By default, the profiles are saved in your OS temporary folder (/tmp for linux)
+You can use the <code>path</code> option to choose where the profile will be saved:</p>
+<pre class="prettyprint source lang-javascript"><code>	const trainingProfile = await atrica.profile({
+		browser: &quot;firefox&quot;,
+		binary: &quot;/usr/bin/firefox&quot;,
+		path: &quot;./privacy-badger-profile&quot;
+	});
+</code></pre>
+<p>Then later in an other script you can load that profile.
+<strong>However keep in mind that if you launch a browser with a profile, that profile
+will be modified by the browser. Therefore you should copy the profile first if you
+don't want to modify the original profile.</strong></p>
+<pre class="prettyprint source lang-javascript"><code>	// Loading the trained profile.
+	const trainedProfile = await atrica.profile({
+		browser: &quot;firefox&quot;,
+		binary: &quot;/usr/bin/firefox&quot;,
+		path: &quot;./privacy-badger-profile&quot;
+	});
+
+	// We don't want to modifiy trainedProfile, we might need it later
+	// so we make a copy of it (stored in /tmp/xxxxxx)
+	const trainedProfileCopy = await trainedProfile.copy();
+</code></pre>
+<h3>Extensions</h3>
+<h4>Downloading extensions</h4>
+<p>Atrica has utility functions to automatically download extensions and put them in a cache.
+To use those functions you need the id of the extension, but you can easily extract it from the url of
+the extension in the chrom web store:</p>
+<pre class="prettyprint source lang-javascript"><code>	// For example if you find ublock origin in the webstore at the following url:
+	let url = &quot;https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm?hl=en&quot;;
+	// Then the id is:
+	let id = &quot;ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm&quot;;
+
+	// For mozilla addons store, if you find pribacy-badger at the follow url:
+	let url2 = &quot;https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/&quot;;
+	// Then the id is:
+	let id = &quot;privacy-badger17&quot;;
+</code></pre>
+<p>Then you can download the extension with:</p>
+<pre class="prettyprint source lang-javascript"><code>	// Chromium-based browsers
+	const ublockPath = await atrica.profile.getChromeExtension({
+		id: &quot;ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm&quot;
+	});
+
+	// Firefox-based browsers
+	const privacyBadger = await atrica.profile.getFirefoxExtension({
+		id: &quot;privacy-badger17&quot;,
+		name: &quot;privacy-badger&quot; //Optional
+	});
+</code></pre>
+<h4>Installing extensions</h4>
+<p>Once you have downloaded the extensions you can install them in the profile.
+** However with this method you can only install them TEMPORARLY (except for Firefox)**
+This means that all the data and configuration related to the extension will be lost if the browser restart.</p>
+<pre class="prettyprint source lang-javascript"><code>	const operaProfile = await atrica.profile({
+		browser: &quot;chromium&quot;,
+		binary: &quot;/snap/bin/opera&quot;,
+		// Works with both firefox and chromium
+		extensions: [ublockPath]
+	});
+</code></pre>
+<p>However with Firefox (or TorBrowser) you can install the extensions permanently, like this:</p>
+<pre class="prettyprint source lang-javascript"><code>	const firefox = await atrica.launch(trainingProfile);
+	// Firefox-based browsers only
+	firefox.install(privacyBadger);
+</code></pre>
+<p>Unfortunately, to my knowledge, chromium does not offer any way to install an extension permanently.
+However you can quickly and easily do it manually (see next paragraph)</p>
+<h4>Manual extension installation and configuration</h4>
+<p>Atrica does not offer any API to automatically configure an extension.
+However you can do it manually, like this:</p>
+<pre class="prettyprint source lang-bash"><code># For firefox : create a profile at /home/user/firefox-manual-profile
+# Then you can use firefox graphical user interface to install and configure
+# all the extensions you want, and it will be saved in the firefox-manual-profile folder 
+firefox -no-remote -profile=/home/user/firefox-manual-profile
+
+# Same thing for chromium-based browsers 
+chromium-browser --user-data-dir=/home/user/chromim-manual-profile
+</code></pre>
+<p><strong>WARNING : the profiles (especially firefox's profiles) contains hard-coded absolute paths,
+so simply copying a profile folder from a machine to another might not work</strong>
+you can maybe replace the old paths with the new one with tools like sed,
+however, for better portabilty you should probably use Docker and its virtual file system.</p>
+<h3>Cleaning a profile</h3>
+<p>If you want to keep an extension configuration but remove traces of
+previous browsing in the profile (cookies, localstorage, cache, etc...)
+you can use the following methods:</p>
+<pre class="prettyprint source lang-javascript"><code>	// Remove cookies, localStorage, cache
+	await browser.clearAllBrowsingData();
+
+	// Remove only what you specify in the options
+	// See documentation for more information
+	await browser.clearBrowsingData(/* options */)
+</code></pre>
+<h3>Headless mode and other puppeteer's options</h3>
+<h4>Puppeteer's options</h4>
+<p>You can set puppeteer options using the <code>options</code> attribute in the profile's options :</p>
+<pre class="prettyprint source lang-javascript"><code>	const profile = await atrica.profile({
+		browser: &quot;chromium&quot;,
+		// Works for both chromium and firefox
+		options: {
+			defaultViewport: {
+				width: 1920,
+				height: 1080
+			}
+		}
+	});
+	const browser = await atrica.launch(profile);
+</code></pre>
+<p>The availables options for chromium are documented <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions">here</a> and those for firefox are documented <a href="https://github.com/deepsweet/foxr#connect">here</a></p>
+<h4>Headless mode</h4>
+<p>By default, atrica do not launch the browser in headless mode.
+That is because <strong>chromium do not support headless mode with extensions</strong>.
+Moreover Atrica is using an extension in the background for firefox support and to enrich puppeteer API.
+If you are using firefox only, then there is no problem, firefox support headless mode with extension.</p>
+<p>However if you are using chrome you have three options :</p>
+<ul>
+<li>Using chrome without headless mode with atrica enabled and other extensions</li>
+<li>Using chrome with headless mode with atrica disabled. In that case:
+<ul>
+<li>You cannot use the enriched API (browser.clearAllBrowsingData, browser.cookies, browser.evaluate)</li>
+<li>You cannot load extensions</li>
+</ul>
+</li>
+<li><strong>On linux you can install <code>xvfb</code>, which creates a virtual screen and run chromium inside it with atrica and extensions enabled</strong>. Very usefull if you are on a linux server. In that case you can just start your script like this:<pre class="prettyprint source lang-bash"><code>  # Launch crawler in a virtual screen
+  xvfb-run -a node crawler.js
+</code></pre>
+</li>
+</ul>
+<p>You can enable headless mode like this:</p>
+<pre class="prettyprint source lang-javascript"><code>	// For chromium
+	const profile = await atrica.profile({
+		browser: &quot;chromium&quot;,
+		options: { headless: true }
+	});
+	// You then need to disable atrica extension
+	const browser = await atrica.launch(profile, {atrica: false});
+
+	// For firefox
+	const fprofile = await atrica.profile({
+		browser: &quot;firefox&quot;,
+		options: { headless: true }
+	});
+	// You don't need to disable atrica for firefox
+	const firefox = await atrica.launch(fprofile);
+</code></pre>
+<h3>TorBrowser</h3>
+<p>If you want to use Atrica with TorBrowser you must be aware of a few things:
+TorBrowser is a modified version of Firefox that comes together with a default profile.
+This default profile has a few extensions installed by default:</p>
+<ul>
+<li>HTTPS everywhere</li>
+<li>NoScript</li>
+<li>TorButton</li>
+<li>TorLauncher: That last extension is what helps you configure the tor proxy before launching firefox</li>
+</ul>
+<p>That profile is located at <code>/path-to-tor-browser/Browser/TorBrowser/Data/Browser/profile.default</code>.
+We are going to use this profile as a starting point.</p>
+<h4>TorBrowser with Tor Proxy</h4>
+<p>If you want to use TorBrowser with the tor proxy and atrica you will have to change the default profile.
+You might want to make a copy of the default profile first.
+By default, all network traffic go through the Tor proxy.
+However we want the atrica extension installed in TorBrowser to be able communicate with
+the atrica server in the nodejs process. Only then can we control the browser.
+So we have to add an exception to the proxy rules for localhost.</p>
+<ol>
+<li>Launch TorBrowser</li>
+<li>Open the Preferences and type &quot;proxy&quot; in the search bar</li>
+<li>Click on &quot;Settings...&quot;</li>
+<li>In the &quot;No proxy for&quot; (the textarea at the bottom) type &quot;127.0.0.1&quot;</li>
+</ol>
+<p>You can now use with atrica.
+<strong>You have an example in <code>examples/tor-profile.js</code>, but you need to remove <code>env: { TOR_TRANSPROXY: &quot;1&quot; }</code></strong></p>
+<h4>TorBrowser without Tor Proxy</h4>
+<p>The Tor proxy considerably slows down the crawling, so if you're only interested in the TorBrowser's privacy
+performance</p>
+<ol>
+<li>You need to disable TorLauncher extension in the default profile
+<ol>
+<li>Launch tor browser</li>
+<li>about:addons in url bar</li>
+<li>disable TorLauncher</li>
+</ol>
+</li>
+<li>You need to set an environment variable <code>TOR_TRANSPROXY=1</code> when launching tor
+You can do that with the <code>env</code> option in atrica.profile:<pre class="prettyprint source lang-javascript"><code>	let profile = await (await atrica.profile({
+		browser: &quot;firefox&quot;,
+		path: defaultProfilePath,
+		binary: binaryPath,
+		env: { TOR_TRANSPROXY: &quot;1&quot; },
+	})).copy();
+</code></pre>
+</li>
+</ol>
+<p><strong>You have an example in <code>examples/tor-profile.js</code></strong></p>
+<h2>Logger</h2>
+<p>Atrica has a logger tool that helps you save the requests, responses and cookies for targetted tabs.</p>
+<h3>Logger Basic example</h3>
+<p>Here is a basic example of how to use the logger API:</p>
+<pre class="prettyprint source lang-javascript"><code>// examples/basic-logger.js
+const atrica = require(&quot;atrica&quot;);
+
+async function main() {
+	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+	const browser = await atrica.launch(profile);
+	const domains = [&quot;wikipedia.org&quot;, &quot;wiktionary.org&quot;, &quot;wikiquote.org&quot;];
+	// Create the logger, saves results in './crawl-results'
+	const logger = await atrica.logger(browser, './crawl-results');
+
+	for(let domain of domains) {
+		const sessionName = domain;
+		const session = await logger.newSession(sessionName);
+
+		const url = `https://${domain}`;
+		const page = await browser.newPage();
+
+		session.listen(page);
+
+		await page.goto(url);
+		await atrica.utils.sleep(1);
+		await page.close();
+
+		await session.saveCookies();
+		await session.close();
+		await browser.clearAllBrowsingData();
+	}
+
+	await browser.close();
+	process.exit();
+}
+
+main();
+</code></pre>
+<p>First we create the logger, which will save the resulst in the &quot;./crawl-results&quot; folder.</p>
+<pre class="prettyprint source lang-javascript"><code>	const logger = await atrica.logger(browser, './crawl-results');
+</code></pre>
+<p>The folder has the following structure:</p>
+<ul>
+<li>database.sqlite : a sqlite database, containing the requests, responses, cookies, etc...</li>
+<li>files : a folder containing the files</li>
+</ul>
+<p>Then we create a session. Sessions allow you to group requests, responses and cookies.
+In the example above, we create one session per domain.</p>
+<pre class="prettyprint source lang-javascript"><code>	const session = await logger.newSession(sessionName);
+</code></pre>
+<p>Then we need to tell the session which page should be listened. The session will only
+log requests, responses, etc... from pages who are being 'listened' :</p>
+<pre class="prettyprint source lang-javascript"><code>	session.listen(page);
+</code></pre>
+<p>Then you can save all the cookies in the browser in the session with:</p>
+<pre class="prettyprint source lang-javascript"><code>	await session.saveCookies();
+</code></pre>
+<p><strong>You need to call session.close() to make sure all requests and responses are properly saved in the database</strong></p>
+<pre class="prettyprint source lang-javascript"><code>	await session.close();
+</code></pre>
+<h3>Database structure</h3>
+<ul>
+<li>
+<p><strong>sessions</strong> : a table containing the session
+|  id   |  name  |
+| :---: | :----: |
+|  int  | string |</p>
+</li>
+<li>
+<p><strong>pages</strong> : everytime the main frame of a tab change location, a new row is added in this table
+|  id   |  url   | sessionId | requestId |
+| :---: | :----: | :-------: | :-------: |
+|  int  | string |    int    |    int    |</p>
+</li>
+<li>
+<p><strong>requests</strong> : represent an HTTP request sent by the browser
+|  id   |  url   | method |   headers    |       resourceType       | pageId | prevId | nextId | sourceId |
+| :---: | :----: | :----: | :----------: | :----------------------: | :----: | :----: | :----: | :------: |
+|  int  | string | string | string(json) | string(image,script,...) |  int   |  int   |  int   |   int    |</p>
+<p>The prevId, nextId and sourceId are used to represent a redirection chain.
+sourceId is the id of the first request in the chain, while prevId and nextId are the ids
+of the previous and next requests.</p>
+</li>
+<li>
+<p><strong>responses</strong> : represent the responses to an HTTP request
+|  id   | status |    headers    |     bodySize     |        bodyLocation        | requestId |
+| :---: | :----: | :-----------: | :--------------: | :------------------------: | :-------: |
+|  int  |  int   | string (json) | int (# of bytes) | string (in <code>files</code> folder) |    int    |</p>
+</li>
+<li>
+<p><strong>cookies</strong> : represent the cookies in the session
+|  id   |  name  | value  | domain | hostOnly |  path  | secure | httpOnly | sameSite | isSession | expirationDate | storeId | sessionId |
+| :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
+|  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |  string   |     string     |   int   |    int    |
+See <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies/Cookie">MDN cookie documentation</a> for more details</p>
+</li>
+</ul>
+<h3>Custom data models</h3>
+<p>Atrica uses <a href="https://sequelize.org/">sequelize</a> as an <a href="https://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a> to communicate with sqlite, and use it to let you easily customize the database schema.
+The default models are : <code>Request</code>, <code>Response</code>, <code>Session</code>, <code>Page</code>, <code>Cookie</code>
+You can customize those models, or create your own.
+Here is an example :</p>
+<pre class="prettyprint source lang-javascript"><code>	// from examples/logger-custom.js
+	const logger = await atrica.logger(browser, &quot;./custom-crawl-results&quot;, {
+		Request: {
+			schema: ({ STRING }) => ({
+				frameType: STRING
+			}),
+			onRequest: (values, request, context) => {
+				// the session name is the domain in this example (see below)
+				const domain = context.session.name;
+				if (request.frame() === context.page.mainFrame()) {
+					values.frameType = &quot;main&quot;;
+				} else if (isFirstParty(request.frame().url(), domain)) {
+					values.frameType = &quot;1st_party_iframe&quot;;
+				} else {
+					values.frameType = &quot;3rd_party_iframe&quot;;
+				}
+			}
+		},
+		Script: {
+			schema: Sequelize => ({
+				first_party_scripts: Sequelize.INTEGER,
+				third_party_scripts: Sequelize.INTEGER
+			}),
+			relations: (Script, models) => {
+				let Session = models.Session;
+				Session.hasMany(Script, { as: &quot;scripts&quot;, foreignKey: &quot;sessionId&quot; });
+				Script.belongsTo(Session, {
+					as: &quot;session&quot;,
+					foreignKey: &quot;sessionId&quot;
+				});
+			},
+			onSession: (values, session) => {
+				session.custom_props = {
+					first_party_scripts: 0,
+					third_party_scripts: 0
+				};
+				session.on(&quot;close&quot;, async () => {
+					session.custom_props.sessionId = session.model.id;
+					await session.logger.models.Script.create(session.custom_props);
+				});
+			},
+			onRequest: (values, request, context) => {
+				const session = context.session;
+				const domain = context.session.name;
+				if (request.resourceType() === &quot;script&quot;) {
+					if (isFirstParty(request.url(), domain)) {
+						session.custom_props.first_party_scripts++;
+					} else {
+						session.custom_props.third_party_scripts++;
+					}
+				}
+			}
+		}
+	});
+</code></pre>
+<p>The third parameter of logger must have the following structure:</p>
+<pre class="prettyprint source lang-javascript"><code>	{
+		Model1: {
+			schema: (Sequelize) => ({attr1: Sequelize.STRING(100), ...})
+			relations: (Model1, models) => {Model1.belongsTo(models.?); Model1.hasMany(...)}
+			onSession: (values, session) => {...},
+			onPage: (values, request, context) => {},
+			onRequest: (values, request, context) => {...},
+			onResponse: (values, response, context) => {...},
+			onResponseBody: (body, values, response, context) => {...}
+		},
+		Model2: {...},
+		...
+	}
+</code></pre>
+<p>The schema function must describe the schema of the table.
+If the model already exists, then the property returned by the function will be added to the schema, otherwise it will create a new table with the schema returned.
+So in our example above, we are adding a <code>frameType</code> column of type STRING to our table.
+Then in the <code>onRequest</code> we are adding <code>frameType</code> to the values that will be sent to the database.
+So in <code>onSession</code> the <code>values</code> parameter are the values that will be sent to the database to create a new row in the <code>sessions</code> table, in <code>onPage</code> it's for the <code>pages</code> table, in <code>onRequest</code> for the <code>requests</code> table, in <code>onResponse</code> for the <code>responses</code> table and in <code>onResponseBody</code> also for the <code>responses</code> table.
+In our example above, we are also creating a new <code>scripts</code> table which, for each session, count
+the number of first-party scripts, and third-party scripts.
+Then we are creating a foreign-key in the <code>scripts</code> table to associate it to the <code>sessions</code> table.
+Javascript is a flexible script language and lets you add attributes to any object at any time.
+Therefore, in onSession we are adding a custom_props attribute to keep our scripts counters.
+Then we use the session's <code>close</code> event to create a new row in the <code>scripts</code>.
+You are responsible for inserting new rows in your custom tables, with Model.create or Model.bulkCreate.
+Note that a large number of insertion in the database may afect the performance of the crawler, so you are
+encouraged to use Model.bulkCreate when you can.
+Read the documentation of <a href="https://sequelize.org/">sequelize</a> for more information on how to create models.</p>
+<h2>Crawler</h2>
+<p>In the previous examples we used a simple loop in order to crawl the different urls.
+But when crawling the web, we may stumble upon some poorly designed or malicious website that might
+make the browser crash or make it unresponsive.
+We might also want to use several browsers at once in order to speed-up the crawling.
+Atrica has a Crawler class in order to make it easier to handle those issues.</p>
+<pre class="prettyprint source lang-javascript"><code>const atrica = require(&quot;atrica&quot;);
+
+// tasks
+const domains = [
+	&quot;wikipedia.org&quot;,
+	&quot;wiktionary.org&quot;,
+	&quot;wikiquote.org&quot;,
+	&quot;wikibooks.org&quot;
+];
+
+async function setup(isRestarting, workerId) {
+	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+	const browser = await atrica.launch(profile);
+	const logger = await atrica.logger(browser, &quot;./crawling-result&quot;);
+	// return context
+	return [browser, logger];
+}
+
+//             worker(task,   context)
+async function worker(domain, [browser, logger]) {
+	const url = `https://${domain}`;
+	const sessionName = domain;
+	const session = await logger.newSession(sessionName);
+	const page = await browser.newPage();
+	session.listen(page);
+	// Max time 
+	await page.goto(url, { timeout: 30000 }).catch(console.error);
+	await page.close();
+	await session.close();
+}
+
+async function cleanup(domain, [browser, logger]) {
+	await browser.close();
+	// If the brower failed during this session, we delete it
+	await logger.deleteSession(domain);
+}
+
+async function main() {
+	const crawler = await atrica.crawler();
+	crawler.setup(setup);
+	crawler.tasks(domains);
+	crawler.worker(worker);
+	crawler.timeout(40)
+	crawler.concurrency(2); // Launching 2 browsers
+	crawler.cleanup(cleanup);
+
+	await crawler.crawl();
+	process.exit();
+}
+
+main();
+
+</code></pre>
+<p>First we define a <code>setup</code> function. Its role will be to setup a worker or in other words,
+launching the browser and creating a logger. It must return a <code>context</code> object, that
+will be passed as argument to the <code>worker</code> function.</p>
+<p>In this example we set concurrency to <code>2</code>. This will create <code>2</code> workers.
+Each worker will call the <code>setup</code> function with their own <code>workerId</code>, and thus, two browsers will be launched.
+Then each worker will take a task on the task stack, and call <code>worker</code> with that task and the context returned by the <code>setup</code> function as parameters. Each worker will repeat this process until there is no task left on the stack.</p>
+<p>If there is an error during the execution of the <code>worker</code> function, or if it takes more than a certain time (set with <code>crawler.timeout(duration)</code>), then we call the <code>cleanup</code> function followed by the <code>setup</code> function again to restart the browser. Finally we call the <code>worker</code> function for the same task and with the new context created by <code>setup</code>.</p>
+<h2>Advanced</h2>
+<h3>Executing scripts</h3>
+<p>Puppeteer lets you execute scripts in a given page with the <code>page.evaluate</code> method (see puppeteer's documentation for more details).
+Atrica enrich puppeteer API and provide a <code>browser.evaulate</code> method, working in a similar way,
+but that execute the provided function inside atrica's extension, giving you access to
+<a href="https://developer.chrome.com/extensions/api_index">Chrome Extensions APIs</a> and <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions">Firefox WebExtension APIs</a> (similar to Chrome Extensions APIs but with a few changes)</p>
+<p>Here is an example:</p>
+<pre class="prettyprint source lang-javascript"><code>// examples/evaluate.js
+const atrica = require(&quot;atrica&quot;);
+
+async function main() {
+	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+	const browser = await atrica.launch(profile);
+	const domains = [&quot;wikipedia.org&quot;, &quot;wiktionary.org&quot;, &quot;wikiquote.org&quot;];
+
+	const getHistory = () => {
+		return new Promise(resolve => {
+			chrome.history.search({ text: &quot;&quot; }, resolve);
+		});
+	};
+
+	for (let domain of domains) {
+		const url = `https://${domain}`;
+		const page = await browser.newPage();
+		await page.goto(url);
+		// Native puppeteer feature
+		let title = await page.evaluate(() => window.document.title);
+		console.log(title);
+		await page.close();
+	}
+
+	// Using atrica browser.evaluate method to access Chrome Extensions API
+	let history = await browser.evaluate(getHistory);
+	console.log(history);
+
+	await browser.close();
+	process.exit();
+}
+
+main();
+</code></pre>
+<p>### Using DevTools protocol with chromium-based browsers
+Puppeteer lets us use the Chrome Devtools Protocol directly, allowing us to do advanced stuff.
+Here is a <a href="https://medium.com/@jsoverson/using-chrome-devtools-protocol-with-puppeteer-737a1300bac0">tutorial</a> explaining
+how to do that.
+A detailed documentation of the Devtools protocol is available <a href="https://chromedevtools.github.io/devtools-protocol/">here</a>
+Here is an example with atrica:</p>
+<pre class="prettyprint source lang-javascript"><code>// examples/devtools-protocol.js
+const atrica = require(&quot;atrica&quot;);
+
+async function main() {
+	const profile = await atrica.profile({ browser: &quot;chromium&quot; });
+	const browser = await atrica.launch(profile);
+	const domains = [&quot;wikipedia.org&quot;, &quot;wiktionary.org&quot;, &quot;wikiquote.org&quot;];
+
+	for (let domain of domains) {
+		const url = `https://${domain}`;
+		const page = await browser.newPage();
+		// Chrome Devtools Protocol client
+		const client = await page.target().createCDPSession();
+		await client.send(&quot;Network.enable&quot;);
+
+		let wsTransferedBytes = 0;
+		client.on(
+			&quot;Network.webSocketFrameReceived&quot;,
+			({ response: { opcode, mask, payloadData } }) => {
+				if (opcode == 1) wsTransferedBytes += payloadData.length;
+				else wsTransferedBytes += Math.floor(payloadData.length * (6 / 8));
+			}
+		);
+
+		await page.goto(url);
+		await atrica.utils.sleep(1);
+
+		// An alternative way to get the cookies on chrome if you
+		// want to disable atrica's extension to enable headless mode
+		let { cookies } = await client.send(&quot;Network.getAllCookies&quot;);
+		console.log(`After visiting ${domain}:`);
+		console.log(` - Cookies: ${cookies.length}`);
+		console.log(` - Bytes transfered using websockets: ${wsTransferedBytes}`);
+		console.log();
+
+		// Removing all cookies from browser
+		await client.send(&quot;Network.clearBrowserCookies&quot;);
+		await page.close();
+	}
+
+	await browser.close();
+	process.exit();
+}
+
+main();
+</code></pre>
+<p>In this example we create a client for each tab (page) and we use it to get
+all the cookies in the browser and then to delete them.
+We also use the event <code>Network.webSocketFrameReceived</code> to calculate the amount
+of data transfered during the browsing.</p></article>
+    </section>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 21 2019 20:26:18 GMT+0900 (Japan Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

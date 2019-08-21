@@ -1,0 +1,108 @@
+{
+	"description": "Atrica extension",
+	"manifest_version": 2,
+	"name": "atrica-webextension",
+	"version": "2.10.2",
+	"applications": {
+		"gecko": {
+			"id": "extension@atrica.io"
+		}
+	},
+
+	"permissions": [
+		"webRequest",
+		"*://*/*",
+		"<all_urls>",
+		"tabs",
+		"activeTab",
+		"cookies",
+		"debugger",
+		"webRequestBlocking",
+		"browsingData",
+		"webNavigation",
+		"accessibilityFeatures",
+		"alarms",
+		"bookmarks",
+		"browserAction",
+		"browsingData",
+		"certificateProvider",
+		"commands",
+		"contentSettings",
+		"contextMenus",
+		"cookies",
+		"debugger",
+		"declarativeContent",
+		"desktopCapture",
+		"devtools.inspectedWindow",
+		"devtools.network",
+		"devtools.panels",
+		"documentScan",
+		"downloads",
+		"enterprise.deviceAttributes",
+		"enterprise.platformKeys",
+		"events",
+		"extension",
+		"extensionTypes",
+		"fileBrowserHandler",
+		"fileSystemProvider",
+		"fontSettings",
+		"gcm",
+		"history",
+		"i18n",
+		"identity",
+		"idle",
+		"input.ime",
+		"instanceID",
+		"management",
+		"networking.config",
+		"notifications",
+		"omnibox",
+		"pageAction",
+		"pageCapture",
+		"permissions",
+		"platformKeys",
+		"power",
+		"printerProvider",
+		"privacy",
+		"proxy",
+		"runtime",
+		"sessions",
+		"storage",
+		"system.cpu",
+		"system.memory",
+		"system.storage",
+		"tabCapture",
+		"tabs",
+		"topSites",
+		"tts",
+		"ttsEngine",
+		"types",
+		"vpnProvider",
+		"wallpaper",
+		"webNavigation",
+		"webRequest",
+		"windows"
+	],
+
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"content_scripts": [
+		{
+			"matches": ["*://*/*", "<all_urls>"],
+			"js": ["document_start.js"],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["*://*/*", "<all_urls>"],
+			"js": ["document_end.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*/*", "<all_urls>"],
+			"js": ["document_idle.js"],
+			"run_at": "document_idle"
+		}
+	]
+}
