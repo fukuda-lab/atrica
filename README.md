@@ -41,6 +41,7 @@ Table of contents
 	- [Crawler](#crawler)
 	- [Advanced](#advanced)
 		- [Executing scripts](#executing-scripts)
+		- [Using DevTools protocol with chromium-based browsers](#using-devtools-protocol-with-chromium-based-browsers)
 
 # Installation
 1. Install the last version of [nodejs](https://nodejs.org/en/) (atrica has not been tested with node < 12.x)
@@ -59,10 +60,8 @@ The documentation can be found here: [https://fukuda-lab.github.io/atrica/](http
 This is a step by step guide with code and explainations.
 The full codes can be found in the `examples` folder.  
 
-<div class="warning">
 **Warning**: Puppeteer and atrica heavily rely on javascript's await/async feature.  
 You should first learn [how to use it](https://alligator.io/js/async-functions/).
-</div>
 
 ## Basic example
 In this example we create a very simple crawler, launching chrome and have it visit
@@ -410,33 +409,33 @@ Then you can save all the cookies in the browser in the session with:
 
 ### Database structure
 - **sessions** : a table containing the session
- |  id   |  name  |
- | :---: | :----: |
- |  int  | string |
+|  id   |  name  |
+| :---: | :----: |
+|  int  | string |
 
 - **pages** : everytime the main frame of a tab change location, a new row is added in this table
- |  id   |  url   | sessionId | requestId |
- | :---: | :----: | :-------: | :-------: |
- |  int  | string |    int    |    int    |
+|  id   |  url   | sessionId | requestId |
+| :---: | :----: | :-------: | :-------: |
+|  int  | string |    int    |    int    |
 
 - **requests** : represent an HTTP request sent by the browser
- |  id   |  url   | method |   headers    |       resourceType       | pageId | prevId | nextId | sourceId |
- | :---: | :----: | :----: | :----------: | :----------------------: | :----: | :----: | :----: | :------: |
- |  int  | string | string | string(json) | string(image,script,...) |  int   |  int   |  int   |   int    |
+|  id   |  url   | method |   headers    |       resourceType       | pageId | prevId | nextId | sourceId |
+| :---: | :----: | :----: | :----------: | :----------------------: | :----: | :----: | :----: | :------: |
+|  int  | string | string | string(json) | string(image,script,...) |  int   |  int   |  int   |   int    |
 
 	The prevId, nextId and sourceId are used to represent a redirection chain.
 	sourceId is the id of the first request in the chain, while prevId and nextId are the ids
 	of the previous and next requests.
 
 - **responses** : represent the responses to an HTTP request
- |  id   | status |    headers    |     bodySize     |        bodyLocation        | requestId |
- | :---: | :----: | :-----------: | :--------------: | :------------------------: | :-------: |
- |  int  |  int   | string (json) | int (# of bytes) | string (in `files` folder) |    int    |
+|  id   | status |    headers    |     bodySize     |        bodyLocation        | requestId |
+| :---: | :----: | :-----------: | :--------------: | :------------------------: | :-------: |
+|  int  |  int   | string (json) | int (# of bytes) | string (in `files` folder) |    int    |
 
 - **cookies** : represent the cookies in the session
- |  id   |  name  | value  | domain | hostOnly |  path  | secure | httpOnly | sameSite | isSession | expirationDate | storeId | sessionId |
- | :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
- |  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |  string   |     string     |   int   |    int    |
+|  id   |  name  | value  | domain | hostOnly |  path  | secure | httpOnly | sameSite | isSession | expirationDate | storeId | sessionId |
+| :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
+|  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |  string   |     string     |   int   |    int    |
 	See [MDN cookie documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies/Cookie) for more details
 
 
@@ -652,7 +651,7 @@ async function main() {
 main();
 ```
 
-### Using DevTools protocol with chromium-based browsers
+### Using DevTools protocol with chromium-based browsers
 Puppeteer lets us use the Chrome Devtools Protocol directly, allowing us to do advanced stuff.
 Here is a [tutorial](https://medium.com/@jsoverson/using-chrome-devtools-protocol-with-puppeteer-737a1300bac0) explaining
 how to do that.
