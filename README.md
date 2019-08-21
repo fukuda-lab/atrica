@@ -408,17 +408,17 @@ Then you can save all the cookies in the browser in the session with:
 ```
 
 ### Database structure
-- **sessions** : a table containing the session
+- **sessions** : a table containing the session  
 |  id   |  name  |
 | :---: | :----: |
 |  int  | string |
 
-- **pages** : everytime the main frame of a tab change location, a new row is added in this table
+- **pages** : everytime the main frame of a tab change location, a new row is added in this table  
 |  id   |  url   | sessionId | requestId |
 | :---: | :----: | :-------: | :-------: |
 |  int  | string |    int    |    int    |
 
-- **requests** : represent an HTTP request sent by the browser
+- **requests** : represent an HTTP request sent by the browser  
 |  id   |  url   | method |   headers    |       resourceType       | pageId | prevId | nextId | sourceId |
 | :---: | :----: | :----: | :----------: | :----------------------: | :----: | :----: | :----: | :------: |
 |  int  | string | string | string(json) | string(image,script,...) |  int   |  int   |  int   |   int    |
@@ -427,12 +427,12 @@ Then you can save all the cookies in the browser in the session with:
 	sourceId is the id of the first request in the chain, while prevId and nextId are the ids
 	of the previous and next requests.
 
-- **responses** : represent the responses to an HTTP request
+- **responses** : represent the responses to an HTTP request  
 |  id   | status |    headers    |     bodySize     |        bodyLocation        | requestId |
 | :---: | :----: | :-----------: | :--------------: | :------------------------: | :-------: |
 |  int  |  int   | string (json) | int (# of bytes) | string (in `files` folder) |    int    |
 
-- **cookies** : represent the cookies in the session
+- **cookies** : represent the cookies in the session  j
 |  id   |  name  | value  | domain | hostOnly |  path  | secure | httpOnly | sameSite | isSession | expirationDate | storeId | sessionId |
 | :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
 |  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |  string   |     string     |   int   |    int    |
