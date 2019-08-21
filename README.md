@@ -442,7 +442,7 @@ Then you can save all the cookies in the browser in the session with:
 | :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
 |  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |    bool   |     string     |   int   |    int    |
 
-	See [MDN cookie documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies/Cookie) for more details
+See [MDN cookie documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies/Cookie) for more details
 
 
 ### Custom data models
