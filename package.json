@@ -8,7 +8,6 @@
 		"docs": "node_modules/.bin/jsdoc -c .jsdoc.json",
 		"build": "webpack --mode production",
 		"dev": "webpack --mode development",
-		"sign": "webpack --mode production && cd extension && rm -f web-ext-artifacts/* && web-ext sign --api-key='user:14716884:236' --api-secret='f422752683c12a297a51209813abbe5df51f87fe221ce16cfa08b6b5dcc92a2d' --source-dir=dist && mv web-ext-artifacts/*.xpi web-ext-artifacts/atrica_extension.xpi",
 		"postinstall": "npm run build",
 		"test": "node tests/tests.js"
 	},
