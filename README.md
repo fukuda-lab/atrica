@@ -44,14 +44,26 @@ Table of contents
 		- [Using DevTools protocol with chromium-based browsers](#using-devtools-protocol-with-chromium-based-browsers)
 
 # Installation
-1. Install the last version of [nodejs](https://nodejs.org/en/) (atrica has not been tested with node < 12.x)
-2. Create a new folder and run 
+1. Install the lastest version of [nodejs](https://nodejs.org/en/) (atrica has not been tested with node < 12.x)
+2. Create a new folder for your project:
+	```bash
+	mkdir my-crawler
+	cd my-crawler
+	```
+3. Initialize your project and install atrica:
    ```bash
    npm init
    npm install atrica
    ```
-**Warning** this project depends on puppeteer which will automatically download chromium-browser.
-It's about 100Mo so it might that a while on slow connections.
+4. Write a script using atrica (See guide below. You can start with [Basic example](#basic-example))
+5. Run the script:
+	```bash
+	node script.js
+	```
+
+
+**Warning:** this project depends on puppeteer which will automatically download chromium-browser.
+It's about 100Mo so it might take a while on slow connections.
 
 # Documentation
 The documentation can be found here: [https://fukuda-lab.github.io/atrica/](https://fukuda-lab.github.io/atrica/)
@@ -68,7 +80,7 @@ In this example we create a very simple crawler, launching chrome and have it vi
 wikipedia and other wikimedia websites.
 
 Hopefully the following code is self explainaroty, but here are a few remarks:
-- In the first line of the main function, we create a new profile. The 'browser' can take two values: 
+- In the first line of the main function, we create a new profile. The 'browser' parameter can take two values: 
   - "chromium" will create a profile for a chromium-based browser (so it will also work with chrome, opera, vivaldi, Edge, etc...)
   - "firefox" will create a profile for a Firefox-based browser (will work with TorBrowser, etc...)
   - See next subsection for more details on profiles
@@ -90,14 +102,17 @@ async function main() {
 		await atrica.utils.sleep(1);
 		await page.close();
 	}
+	
+	await browser.close();
+	process.exit();
 }
 
 main();
 ```
 
 ## Profiles
-All the code in this subsection is an extract from `examples/profiles.js`.
-You are encouraged to read this file after reading this subsection.
+All the code in this subsection is an extract from `examples/profiles.js` (and `examples/profile-tor.js`).
+You are encouraged to also read this file to get the whole picture.
 
 ### Browser binary path
 If you create a profile with the minimum options like this: 
@@ -159,7 +174,7 @@ the extension in the chrom web store:
 	// For mozilla addons store, if you find pribacy-badger at the follow url:
 	let url2 = "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/";
 	// Then the id is:
-	let id = "privacy-badger17";
+	let id2 = "privacy-badger17";
 ```
 
 Then you can download the extension with:
@@ -195,7 +210,7 @@ However with Firefox (or TorBrowser) you can install the extensions permanently,
 	// Firefox-based browsers only
 	firefox.install(privacyBadger);
 ```
-Unfortunately, to my knowledge, chromium does not offer any way to install an extension permanently.
+Unfortunately, to my knowledge, chromium does not offer any way to install an extension permanently programmatically.
 However you can quickly and easily do it manually (see next paragraph)
 
 #### Manual extension installation and configuration
@@ -215,7 +230,7 @@ chromium-browser --user-data-dir=/home/user/chromim-manual-profile
 **WARNING : the profiles (especially firefox's profiles) contains hard-coded absolute paths,
 so simply copying a profile folder from a machine to another might not work**
 you can maybe replace the old paths with the new one with tools like sed,
-however, for better portabilty you should probably use Docker and its virtual file system.
+however, for better portabilty you should probably use Docker and its virtual file system (if you need to share a profile with manual configuration).
 
 ### Cleaning a profile
 If you want to keep an extension configuration but remove traces of
@@ -440,7 +455,7 @@ Then you can save all the cookies in the browser in the session with:
 
 |  id   |  name  | value  | domain | hostOnly |  path  | secure | httpOnly | sameSite | isSession | expirationDate | storeId | sessionId |
 | :---: | :----: | :----: | :----: | :------: | :----: | :----: | :------: | :------: | :-------: | :------------: | :-----: | :-------: |
-|  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |    bool   |     string     |   int   |    int    |
+|  int  | string | string | string |   bool   | string |  bool  |   bool   |  string  |   bool    |     string     |   int   |    int    |
 
 See [MDN cookie documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies/Cookie) for more details
 
