@@ -1,7 +1,7 @@
 {
 	"name": "atrica",
 	"version": "1.0.0",
-	"description": "atrica",
+	"description": "library that helps you building a web-crawler, espcially for web-privacy measurements",
 	"main": "src/index.js",
 	"license": "MIT",
 	"scripts": {
