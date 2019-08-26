@@ -1,3 +1,10 @@
 node_modules
+!**/.gitkeep
+yarn-*
+results
+**/.cache
+**/.tmp
+dist
 docs
 tests
+examples
