@@ -11,7 +11,7 @@ const requestHandler = (tab, session) => {
 		([_, model]) => model.info
 	);
 
-	let page = { page: {}, requests: {}, responses: {}, requestUpdates: {} };
+	let page = { page: {}, requests: {}, responses: {} };
 
 	const savePage = () => {
 		let { Page, Request, Response } = logger.models;
@@ -24,7 +24,6 @@ const requestHandler = (tab, session) => {
 
 		let requests = Object.values(page.requests);
 		let responses = Object.values(page.responses);
-		let requestUpdates = Object.values(page.requestUpdates);
 
 		if (requests.length > 0) {
 			createOrUpdate(Request, requests).catch(error => {
@@ -38,15 +37,6 @@ const requestHandler = (tab, session) => {
 				console.error(error);
 				console.error(firstLines(new Error(), 3));
 			});
-		}
-
-		if (requestUpdates.length > 0) {
-			createOrUpdate(Request, requestUpdates, ["id", "responseId"]).catch(
-				error => {
-					console.error(error);
-					console.error(firstLines(new Error(), 3));
-				}
-			);
 		}
 	};
 
@@ -73,7 +63,6 @@ const requestHandler = (tab, session) => {
 				},
 				requests: {},
 				responses: {},
-				requestUpdates: {}
 			};
 
 			for (let [_, model] of allModels) {
@@ -142,12 +131,14 @@ const requestHandler = (tab, session) => {
 				model.info.onResponse(page.responses[rid], response, context);
 			}
 			if (typeof model.info.onResponseBody === "function") {
-				model.info.onResponseBody(body || null, page.responses[rid], response, context);
+				model.info.onResponseBody(
+					body || null,
+					page.responses[rid],
+					response,
+					context
+				);
 			}
 		}
-
-		if (page.requests[rid]) page.requests[rid].responseId = rid;
-		else page.requestUpdates[rid] = { id: rid, responseId: rid };
 	};
 
 	const onSessionCloseHandler = savePage;

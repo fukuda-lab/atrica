@@ -200,7 +200,11 @@ class Crawler {
 							colors.red.bold(`Restarting browser`)
 						);
 						
-						if (this._cleanup) await this._cleanup(task, context, id);
+						try {
+							if (this._cleanup) await this._cleanup(task, context, id);
+						} catch(error) {
+							console.error(error);
+						}
 						context = await this._setup(true, id);
 						attemps++;
 					}

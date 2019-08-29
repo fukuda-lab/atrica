@@ -5,20 +5,22 @@ const $ = require("./instructions");
 const BrowserEvents = require("./events");
 
 const clearBrowserDataOptions = {
-	//appcache: true,
+	//appcache: true, //Deprecated
 	cache: true,
 	cacheStorage: true,
 	cookies: true,
+	localStorage: true,
+	serviceWorkers: true,
+	webSQL: true,
+	//indexedDB: true, //Trigger an error on firefox (could not find issue)
+
+	//// Not browsing data
 	//downloads: true,
 	//fileSystems: true,
 	//formData: true,
 	//history: true,
-	indexedDB: true,
-	localStorage: true,
-	pluginData: false,
 	//passwords: true,
-	serviceWorkers: true,
-	webSQL: true
+	//pluginData: false,
 };
 
 /**
