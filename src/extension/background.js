@@ -1,5 +1,11 @@
 import displayWelcomeMessage from "./lib/welcome";
-import { isChrome, isFirefox, getCurrentWindow, bootstrap, connectToServer } from "./lib/utils";
+import {
+	isChrome,
+	isFirefox,
+	getCurrentWindow,
+	bootstrap,
+	connectToServer
+} from "./lib/utils";
 import * as actions from "./lib/actions";
 import network from "./lib/network";
 import $ from "../puppeteer/instructions";
@@ -85,7 +91,8 @@ async function main() {
 			[$.getCookies]: actions.getCookies,
 			[$.setCookies]: actions.setCookies,
 			[$.page.pages]: actions.getAllPages,
-			[$.evaluate]: actions.globalEvaluate
+			[$.evaluate]: actions.globalEvaluate,
+			chrome_enable_network: () => network(server)
 		};
 
 		// Instruction success
@@ -102,7 +109,9 @@ async function main() {
 			console.error(error);
 			server.emit("instruction-error", {
 				id: id,
-				error: `Attrica-extension :: ${error.name} : ${error.message}\n ${error.stack}`
+				error: `Attrica-extension :: ${error.name} : ${error.message}\n ${
+					error.stack
+				}`
 			});
 		}
 	});

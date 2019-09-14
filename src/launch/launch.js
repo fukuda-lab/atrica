@@ -28,7 +28,10 @@ let mfirstPort = 2850;
  * @param {object} options
  * @returns {Promise<TPuppeteer>} the browser
  */
-async function launch(profile, { atrica: withAtrica = true } = {}) {
+async function launch(
+	profile,
+	{ atrica: withAtrica = true, chromeFavourAtrica = false } = {}
+) {
 	let browser;
 	let atrica;
 	// FIREFOX
@@ -45,7 +48,9 @@ async function launch(profile, { atrica: withAtrica = true } = {}) {
 		);
 		browser.profile = profile;
 		if (withAtrica) {
-			browser = enrichBrowserAPI(browser, atrica);
+			browser = enrichBrowserAPI(browser, atrica, chromeFavourAtrica);
+			if (chromeFavourAtrica)
+				await browser.dispatcher.execute("chrome_enable_network");
 		}
 	}
 	// ERROR : NOT VALID BROWSER
@@ -235,7 +240,7 @@ async function connectToBrowser(bid) {
  * @param {import('puppeteer').Browser & {profile:Profile}} browser
  * @param {Puppeteer} atrica
  */
-function enrichBrowserAPI(browser, atrica) {
+function enrichBrowserAPI(browser, atrica, chromeFavourAtrica) {
 	let result = browser;
 	if (browser.profile.browser === "firefox") {
 		// Launched with foxr
@@ -250,6 +255,9 @@ function enrichBrowserAPI(browser, atrica) {
 			result.install = browser.install.bind(browser);
 		}
 		browser.atrica = atrica;
+	} else if (chromeFavourAtrica) {
+		result = atrica;
+		result.close = browser.close.bind(browser);
 	}
 
 	if (result !== atrica) {

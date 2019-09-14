@@ -8,7 +8,6 @@
 		"docs": "node_modules/.bin/jsdoc -c .jsdoc.json",
 		"build": "webpack --mode production",
 		"dev": "webpack --mode development",
-		"postinstall": "npm run build",
 		"test": "node tests/tests.js"
 	},
 	"dependencies": {
